@@ -742,6 +742,51 @@
         transform: none;
       }
     }
+    
+/* Responsive footer creator links */
+.home-footer .footer-creators {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 14px;
+  padding: 0 8px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.home-footer .footer-created-label {
+  color: #63708a;
+  font-weight: 600;
+}
+
+.home-footer .footer-creators a {
+  color: #0A66C2;
+  font-weight: 700;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.home-footer .footer-creators a:hover {
+  text-decoration: underline;
+}
+
+.home-footer .footer-divider {
+  color: #a0a9ba;
+}
+
+@media (max-width: 480px) {
+  .home-footer {
+    padding: 18px 12px;
+  }
+
+  .home-footer .footer-creators {
+    gap: 6px 9px;
+    font-size: 12px;
+  }
+}
+
 
   </style>
 </head>
@@ -1092,19 +1137,41 @@
        FOOTER
        ===================================================== -->
 
-  <footer class="home-footer">
+ 
+<footer class="home-footer">
+  <p>
+    <strong>CampusAchieve</strong>
+    &nbsp;|&nbsp;
+    Poornima Institute of Engineering and Technology, Jaipur
+  </p>
 
-    <p>
-      <strong>CampusAchieve</strong>
-      &nbsp;|&nbsp;
-      Poornima Institute of Engineering and Technology, Jaipur
-    </p>
+  <p class="footer-subtitle">
+    Student Certificate Management Portal
+  </p>
 
-    <p class="footer-subtitle">
-      Student Certificate Management Portal
-    </p>
+  <div class="footer-creators">
+    <span class="footer-created-label">Created by:</span>
 
-  </footer>
+    <a
+      href="https://www.linkedin.com/in/akshit-r-9687b7388/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Akshit Rana
+    </a>
+
+    <span class="footer-divider" aria-hidden="true">|</span>
+
+    <a
+      href="https://www.linkedin.com/in/abhinash-raj-78a68a392/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Abhinash Raj
+    </a>
+  </div>
+</footer>
+
 
 
   <!-- =====================================================

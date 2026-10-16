@@ -1150,7 +1150,46 @@ td .button {
 }
 
 /* ---------- 17. Footer ---------- */
+/* ---------- Footer Creator Links ---------- */
 
+.home-footer .footer-creators {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 14px;
+  padding: 0 8px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.home-footer .footer-created-label {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.home-footer .footer-creators a {
+  color: #0A66C2;
+  font-weight: 700;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.home-footer .footer-creators a:hover {
+  text-decoration: underline;
+}
+
+.home-footer .footer-divider {
+  color: #a0a9ba;
+}
+
+@media (max-width: 480px) {
+  .home-footer .footer-creators {
+    gap: 6px 9px;
+    font-size: 12px;
+  }
+}
 .site-footer,
 footer {
   padding: 24px;
