@@ -1,4 +1,3 @@
-
 require('dotenv').config();
 
 const path = require('path');
@@ -24,6 +23,11 @@ const {
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
 const app = express();
+
+// FIX: Render HTTPS proxy ke peeche chalta hai.
+// Isके bina secure session cookie set nahi hoti.
+app.set('trust proxy', 1);
+
 const port = Number(process.env.PORT || 3000);
 const isProduction = process.env.NODE_ENV === 'production';
 const maxBytes = Number(process.env.MAX_FILE_SIZE_MB || 10) * 1024 * 1024;
@@ -726,7 +730,6 @@ app.post(
 
       uploadedObjectKey = key;
 
-      // FIX: Comma separates the SQL string from the values array.
       await db.execute(
         `INSERT INTO certificates
          (student_id, category, event_name, event_date, file_name,
