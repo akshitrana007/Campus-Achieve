@@ -1,3 +1,4 @@
+
 require('dotenv').config();
 
 const path = require('path');
@@ -82,9 +83,21 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
+      baseUri: ["'self'"],
+      formAction: ["'self'"],
+      styleSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        "https://fonts.googleapis.com"
+      ],
+      fontSrc: [
+        "'self'",
+        "https://fonts.gstatic.com",
+        "https:",
+        "data:"
+      ],
       scriptSrc: ["'self'"],
-      imgSrc: ["'self'", 'data:'],
+      imgSrc: ["'self'", "data:"],
       objectSrc: ["'none'"],
       frameAncestors: ["'none'"]
     }
@@ -335,41 +348,58 @@ app.post('/auth/admin/login', async (req, res) => {
 
     const admin = rows[0];
 
-    await new Promise((resolve, reject) => {
-      req.session.regenerate(err => {
-        if (err) reject(err);
-        else resolve();
-      });
-    });
-
-    req.login({
-      role: 'admin',
-      id: admin.id,
-      email: admin.email,
-      name: admin.name,
-      mustChangePassword: !!admin.must_change_password
-    }, err => {
+    req.session.regenerate(err => {
       if (err) {
+        console.error('Admin session regeneration error:', err.message);
+
         return res.status(500).json({
-          error: 'Login failed.'
+          error: 'Could not start a secure session.'
         });
       }
 
-      db.execute(
-        'UPDATE admins SET last_login_at = NOW() WHERE id = ?',
-        [admin.id]
-      ).catch(() => {});
-
-      res.json({
-        ok: true,
+      req.login({
+        role: 'admin',
+        id: admin.id,
+        email: admin.email,
+        name: admin.name,
         mustChangePassword: !!admin.must_change_password
+      }, loginErr => {
+        if (loginErr) {
+          console.error('Admin session login error:', loginErr.message);
+
+          return res.status(500).json({
+            error: 'Login failed.'
+          });
+        }
+
+        req.session.save(saveErr => {
+          if (saveErr) {
+            console.error('Admin session save error:', saveErr.message);
+
+            return res.status(500).json({
+              error: 'Could not save your login session.'
+            });
+          }
+
+          db.execute(
+            'UPDATE admins SET last_login_at = NOW() WHERE id = ?',
+            [admin.id]
+          ).catch(err => {
+            console.error('Last login update error:', err.message);
+          });
+
+          return res.json({
+            ok: true,
+            mustChangePassword: !!admin.must_change_password
+          });
+        });
       });
     });
 
   } catch (err) {
     console.error('Admin login error:', err.message);
 
-    res.status(500).json({
+    return res.status(500).json({
       error: 'Unable to log in.'
     });
   }
@@ -923,6 +953,7 @@ app.get(
     }
   }
 );
+
 // ================= MANAGE ADMINS =================
 
 // List all admin accounts for the dashboard
@@ -1027,6 +1058,7 @@ app.post('/api/admin/admins', requireAdmin, async (req, res) => {
     });
   }
 });
+
 // ================= PAGES AND HEALTH =================
 
 app.get('/admin', (_req, res) => {

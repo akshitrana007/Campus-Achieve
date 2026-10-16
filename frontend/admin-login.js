@@ -6,7 +6,6 @@
    PIET | Pure Vanilla JavaScript
    ========================================================= */
 
-
 /* ---------- 1. DOM elements ---------- */
 
 const loginForm = document.getElementById("adminLoginForm");
@@ -15,8 +14,46 @@ const passwordInput = document.getElementById("password");
 const loginButton = document.getElementById("loginButton");
 const messageElement = document.getElementById("msg");
 
+/* ---------- 2. Additional HTML elements ---------- */
 
-/* ---------- 2. Check required HTML elements ---------- */
+const pietLogo = document.getElementById("pietLogo");
+const logoFallback = document.getElementById("logoFallback");
+const toggleButton = document.getElementById("togglePassword");
+
+/* ---------- 3. Logo fallback ---------- */
+
+function showPietFallback() {
+  if (pietLogo && logoFallback) {
+    pietLogo.hidden = true;
+    logoFallback.hidden = false;
+  }
+}
+
+if (pietLogo && logoFallback) {
+  pietLogo.addEventListener("error", showPietFallback);
+
+  if (pietLogo.complete && pietLogo.naturalWidth === 0) {
+    showPietFallback();
+  }
+}
+
+/* ---------- 4. Password Show/Hide ---------- */
+
+if (passwordInput && toggleButton) {
+  toggleButton.addEventListener("click", () => {
+    const passwordVisible = passwordInput.type === "text";
+
+    passwordInput.type = passwordVisible ? "password" : "text";
+    toggleButton.textContent = passwordVisible ? "Show" : "Hide";
+
+    toggleButton.setAttribute(
+      "aria-pressed",
+      String(!passwordVisible)
+    );
+  });
+}
+
+/* ---------- 5. Check required HTML elements ---------- */
 
 if (
   !loginForm ||
@@ -29,9 +66,7 @@ if (
     "Admin login initialisation failed: required HTML elements are missing."
   );
 } else {
-
-
-  /* ---------- 3. API helper ---------- */
+  /* ---------- 6. API helper ---------- */
 
   async function api(url, options = {}) {
     const response = await fetch(url, {
@@ -39,9 +74,7 @@ if (
       ...options
     });
 
-    const contentType =
-      response.headers.get("content-type") || "";
-
+    const contentType = response.headers.get("content-type") || "";
     let data;
 
     if (contentType.includes("application/json")) {
@@ -65,25 +98,19 @@ if (
     return data;
   }
 
-
-  /* ---------- 4. Display status and errors ---------- */
+  /* ---------- 7. Display status and errors ---------- */
 
   function showMessage(message, type = "") {
     messageElement.textContent = message;
 
-    messageElement.classList.remove(
-      "success",
-      "error",
-      "warning"
-    );
+    messageElement.classList.remove("success", "error", "warning");
 
     if (type) {
       messageElement.classList.add(type);
     }
   }
 
-
-  /* ---------- 5. Button loading state ---------- */
+  /* ---------- 8. Button loading state ---------- */
 
   function setLoginLoading(isLoading) {
     loginButton.disabled = isLoading;
@@ -101,8 +128,7 @@ if (
     }
   }
 
-
-  /* ---------- 6. Validate credentials ---------- */
+  /* ---------- 9. Validate credentials ---------- */
 
   function validateCredentials(email, password) {
     if (!email || !password) {
@@ -114,24 +140,19 @@ if (
       return false;
     }
 
-    // Correct email validation pattern
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailPattern.test(email)) {
-      showMessage(
-        "Please enter a valid email address.",
-        "error"
-      );
-
+      showMessage("Please enter a valid email address.", "error");
       emailInput.focus();
+
       return false;
     }
 
     return true;
   }
 
-
-  /* ---------- 7. Handle login form submission ---------- */
+  /* ---------- 10. Handle login form submission ---------- */
 
   loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -150,19 +171,14 @@ if (
     }
 
     setLoginLoading(true);
-
-    showMessage(
-      "Verifying your administrator credentials..."
-    );
+    showMessage("Verifying your administrator credentials...");
 
     try {
-      await api("/auth/admin/login", {
+      const data = await api("/auth/admin/login", {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json"
         },
-
         body: JSON.stringify({
           email,
           password
@@ -174,11 +190,10 @@ if (
         "success"
       );
 
-      /*
-       * This path must be served by your Express backend.
-       * If your server uses a different dashboard route,
-       * change this URL to match server.js.
-       */
+      if (data.mustChangePassword) {
+        window.location.assign("/admin-dashboard.html");
+        return;
+      }
 
       window.location.assign("/admin-dashboard.html");
 
@@ -196,8 +211,7 @@ if (
     }
   });
 
-
-  /* ---------- 8. Clear errors while typing ---------- */
+  /* ---------- 11. Clear errors while typing ---------- */
 
   emailInput.addEventListener("input", () => {
     if (messageElement.classList.contains("error")) {
@@ -211,10 +225,8 @@ if (
     }
   });
 
-
-  /* ---------- 9. Initialise login form ---------- */
+  /* ---------- 12. Initialise login form ---------- */
 
   setLoginLoading(false);
   showMessage("");
-
 }

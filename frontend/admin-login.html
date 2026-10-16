@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -470,10 +471,7 @@
 
 <body class="admin-login-page">
 
-  <!-- ==================================================
-       HEADER WITH PIET BRANDING
-       ================================================== -->
-
+  <!-- HEADER WITH PIET BRANDING -->
   <header class="site-header">
     <div class="header-inner">
 
@@ -514,11 +512,7 @@
     </div>
   </header>
 
-
-  <!-- ==================================================
-       LOGIN PAGE CONTENT
-       ================================================== -->
-
+  <!-- LOGIN PAGE CONTENT -->
   <main class="admin-login-main">
 
     <!-- Left information panel -->
@@ -563,7 +557,6 @@
 
     </section>
 
-
     <!-- Right login card -->
     <section
       class="admin-login-card"
@@ -588,7 +581,6 @@
         >◈</div>
 
       </div>
-
 
       <!-- Login form -->
       <form
@@ -622,7 +614,6 @@
 
         </div>
 
-
         <!-- Administrator password -->
         <div class="form-group">
 
@@ -655,7 +646,6 @@
 
         </div>
 
-
         <!-- Login status and error messages -->
         <p
           id="msg"
@@ -663,7 +653,6 @@
           role="status"
           aria-live="polite"
         ></p>
-
 
         <!-- Login button -->
         <button
@@ -677,7 +666,6 @@
 
       </form>
 
-
       <div class="admin-security-note">
 
         <span aria-hidden="true">◆</span>
@@ -690,7 +678,6 @@
 
       </div>
 
-
       <div class="admin-login-divider"></div>
 
       <a class="admin-back-link" href="/">
@@ -702,11 +689,7 @@
 
   </main>
 
-
-  <!-- ==================================================
-       FOOTER
-       ================================================== -->
-
+  <!-- FOOTER -->
   <footer class="admin-login-footer">
 
     <p>
@@ -721,50 +704,8 @@
 
   </footer>
 
-
-  <!-- ==================================================
-       LOGO FALLBACK + PASSWORD VISIBILITY
-       Scoped to avoid conflicts with admin-login.js
-       ================================================== -->
-
-  <script>
-    (() => {
-      "use strict";
-
-      const pietLogo = document.getElementById("pietLogo");
-      const logoFallback = document.getElementById("logoFallback");
-
-      function showPietFallback() {
-        pietLogo.hidden = true;
-        logoFallback.hidden = false;
-      }
-
-      pietLogo.addEventListener("error", showPietFallback);
-
-      if (pietLogo.complete && pietLogo.naturalWidth === 0) {
-        showPietFallback();
-      }
-
-      const passwordField = document.getElementById("password");
-      const toggleButton = document.getElementById("togglePassword");
-
-      toggleButton.addEventListener("click", () => {
-        const passwordVisible = passwordField.type === "text";
-
-        passwordField.type = passwordVisible ? "password" : "text";
-        toggleButton.textContent = passwordVisible ? "Show" : "Hide";
-
-        toggleButton.setAttribute(
-          "aria-pressed",
-          String(!passwordVisible)
-        );
-      });
-    })();
-  </script>
-
-
-  <!-- Admin login logic -->
-  <script src="admin-login.js"></script>
+  <!-- All JavaScript is loaded externally to comply with CSP -->
+  <script src="/admin-login.js" defer></script>
 
 </body>
 </html>
