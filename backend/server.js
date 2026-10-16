@@ -57,9 +57,10 @@ const db = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  ssl: process.env.DB_SSL === 'true'
-    ? { rejectUnauthorized: true }
-    : undefined
+  ssl: {
+    ca: process.env.DB_CA_CERT,
+    rejectUnauthorized: true
+  }
 });
 
 const sessionStore = new MySQLStore({}, db);
