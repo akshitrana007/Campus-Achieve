@@ -11,3 +11,6 @@ frontend/images/~$*.xlsx
 
 frontend/images/*.xlsx
 backend/*.backup
+.env
+backend/.env
+backend/aiven-ca.pem

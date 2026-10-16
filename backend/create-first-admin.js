@@ -1,7 +1,10 @@
-﻿require("dotenv").config();
+﻿
+require("dotenv").config();
 
 const mysql = require("mysql2/promise");
 const readline = require("node:readline");
+const fs = require("node:fs");
+const path = require("node:path");
 
 let bcrypt;
 try {
@@ -29,7 +32,11 @@ function askHidden(question) {
     const input = process.stdin;
 
     if (!input.isTTY || typeof input.setRawMode !== "function") {
-      reject(new Error("Use the VS Code integrated terminal for hidden password input."));
+      reject(
+        new Error(
+          "Use the VS Code integrated terminal for hidden password input."
+        )
+      );
       return;
     }
 
@@ -80,12 +87,24 @@ function askHidden(question) {
   let db;
 
   try {
+    const caPath = path.join(__dirname, "aiven-ca.pem");
+
+    if (!fs.existsSync(caPath)) {
+      throw new Error(
+        "aiven-ca.pem not found inside the backend folder."
+      );
+    }
+
     db = await mysql.createConnection({
       host: process.env.DB_HOST,
       port: Number(process.env.DB_PORT || 3306),
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME
+      database: process.env.DB_NAME,
+      ssl: {
+        ca: fs.readFileSync(caPath, "utf8"),
+        rejectUnauthorized: true
+      }
     });
 
     const [existing] = await db.execute(
@@ -93,24 +112,37 @@ function askHidden(question) {
     );
 
     if (existing.length > 0) {
-      console.log("An admin account already exists. No account was created.");
+      console.log(
+        "An admin account already exists. No account was created."
+      );
       return;
     }
 
-    const email = (await ask("Initial admin email: ")).toLowerCase();
+    const email = (
+      await ask("Initial admin email: ")
+    ).toLowerCase();
+
     const name = await ask("Admin name: ");
 
     if (!email || !email.includes("@") || !name) {
-      throw new Error("Enter a valid email and a non-empty name.");
+      throw new Error(
+        "Enter a valid email and a non-empty name."
+      );
     }
 
-    const password = await askHidden("Choose password (14+ characters): ");
+    const password = await askHidden(
+      "Choose password (14+ characters): "
+    );
 
     if (password.length < 14) {
-      throw new Error("Password must be at least 14 characters.");
+      throw new Error(
+        "Password must be at least 14 characters."
+      );
     }
 
-    const confirmation = await askHidden("Re-enter password: ");
+    const confirmation = await askHidden(
+      "Re-enter password: "
+    );
 
     if (password !== confirmation) {
       throw new Error("Passwords do not match.");
@@ -126,9 +158,17 @@ function askHidden(question) {
     );
 
     console.log("Initial admin created successfully.");
-    console.log("Now open http://localhost:3000/admin and log in.");
-  } catch (error) {
-    console.error("Could not create initial admin:", error.message);
+    console.log(
+      "Now log in using the admin email and password."
+    );
+   } catch (error) {
+    console.error("Could not create initial admin:");
+    console.error("Error:", String(error));
+    console.error(
+      "Details:",
+      JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
+    );
+    console.error("Stack:", error.stack);
   } finally {
     if (db) await db.end();
   }
