@@ -1,0 +1,1345 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="CampusAchieve administration dashboard for Poornima Institute of Engineering and Technology, Jaipur."
+  >
+
+  <meta name="theme-color" content="#14264a">
+
+  <title>Admin Dashboard | CampusAchieve — PIET</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    .admin-dashboard-page { min-height: 100vh; }
+
+    .admin-dashboard-main {
+      width: min(1320px, calc(100% - 48px));
+      margin-inline: auto;
+      padding-block: 32px 55px;
+    }
+
+    .admin-dashboard-header-inner {
+      min-height: 76px;
+      gap: 18px;
+    }
+
+    .admin-dashboard-brand {
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .admin-dashboard-brand img {
+      width: 350px;
+      height: 140px;
+      max-width: 100%;
+      padding: 0;
+      flex-shrink: 0;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      object-fit: contain;
+    }
+
+    .admin-brand-fallback {
+      display: grid;
+      place-items: center;
+      width: 350px;
+      height: 140px;
+      max-width: 100%;
+      flex-shrink: 0;
+      border: 2px solid #efbd42;
+      border-radius: 13px;
+      background: #14264a;
+      color: #f6ce65;
+      font-size: 32px;
+      font-weight: 800;
+    }
+
+    .admin-header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .admin-identity {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 12px 7px 7px;
+      border: 1px solid #e5eaf3;
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    .admin-avatar {
+      display: grid;
+      place-items: center;
+      width: 35px;
+      height: 35px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: #eaf1ff;
+      color: #2456bc;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .admin-identity-copy {
+      display: grid;
+      gap: 1px;
+    }
+
+    .admin-identity-copy strong {
+      max-width: 190px;
+      overflow: hidden;
+      color: #14264a;
+      font-size: 11px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .admin-identity-copy span {
+      color: #8d98ad;
+      font-size: 10px;
+    }
+
+    .admin-dashboard-welcome {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      padding: clamp(27px, 4vw, 42px);
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at 88% 15%, rgb(246 206 101 / 21%), transparent 27%),
+        linear-gradient(125deg, #101d3a, #1b3766);
+      box-shadow: 0 20px 48px rgb(20 38 74 / 14%);
+      color: #fff;
+    }
+
+    .admin-dashboard-welcome::after {
+      position: absolute;
+      z-index: -1;
+      right: -85px;
+      bottom: -140px;
+      width: 280px;
+      height: 280px;
+      border: 1px solid rgb(255 255 255 / 12%);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 35px rgb(255 255 255 / 3%),
+        0 0 0 70px rgb(255 255 255 / 3%);
+      content: "";
+      pointer-events: none;
+    }
+
+    .admin-dashboard-welcome-content {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+    }
+
+    .admin-dashboard-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+      color: #f6ce65;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .admin-dashboard-eyebrow::before {
+      width: 23px;
+      height: 2px;
+      background: #f6ce65;
+      content: "";
+    }
+
+    .admin-dashboard-welcome h1 {
+      margin-bottom: 12px;
+      color: #fff;
+      font-size: clamp(29px, 4vw, 42px);
+      font-weight: 800;
+      letter-spacing: -0.055em;
+      line-height: 1.16;
+    }
+
+    .admin-dashboard-welcome p {
+      max-width: 670px;
+      margin-bottom: 0;
+      color: rgb(255 255 255 / 77%);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .admin-welcome-decoration {
+      display: grid;
+      place-items: center;
+      width: 78px;
+      height: 78px;
+      flex-shrink: 0;
+      border: 1px solid rgb(246 206 101 / 35%);
+      border-radius: 22px;
+      background: rgb(246 206 101 / 12%);
+      color: #f6ce65;
+      font-size: 35px;
+    }
+
+    .admin-page-message { margin-top: 18px; }
+
+    .admin-section-nav {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-block: 25px 22px;
+    }
+
+    .admin-section-nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 39px;
+      padding: 9px 14px;
+      border: 1px solid #e1e7f1;
+      border-radius: 10px;
+      background: #fff;
+      color: #53627d;
+      font-size: 11px;
+      font-weight: 700;
+      transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+    }
+
+    .admin-section-nav a:hover {
+      border-color: #cbd9f5;
+      background: #f5f8ff;
+      color: #2456bc;
+    }
+
+    .nav-dot {
+      width: 7px;
+      height: 7px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: #3268d6;
+    }
+
+    .nav-dot.gold { background: #efbd42; }
+
+    .admin-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 27px;
+    }
+
+    .admin-metric {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      min-width: 0;
+      padding: 21px;
+      border: 1px solid #e3e9f3;
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 5px 18px rgb(20 38 74 / 4%);
+    }
+
+    .admin-metric-icon {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      border: 1px solid #dce7ff;
+      border-radius: 15px;
+      background: #eaf1ff;
+      color: #2456bc;
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .admin-metric-icon.gold {
+      border-color: #f3e2ae;
+      background: #fff4d4;
+      color: #88630c;
+    }
+
+    .admin-metric-icon.green {
+      border-color: #c8efd9;
+      background: #e3f7ed;
+      color: #16845b;
+    }
+
+    .admin-metric-copy {
+      display: grid;
+      min-width: 0;
+      gap: 4px;
+    }
+
+    .admin-metric-copy span {
+      color: #63708a;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .admin-metric-copy strong {
+      overflow-wrap: anywhere;
+      color: #14264a;
+      font-size: 27px;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      line-height: 1.2;
+    }
+
+    .admin-dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.7fr) minmax(300px, 0.9fr);
+      align-items: start;
+      gap: 22px;
+    }
+
+    .admin-dashboard-column {
+      display: grid;
+      min-width: 0;
+      gap: 22px;
+    }
+
+    .admin-dashboard-card {
+      min-width: 0;
+      padding: 25px;
+      border: 1px solid #e3e9f3;
+      border-radius: 21px;
+      background: #fff;
+      box-shadow: 0 7px 24px rgb(20 38 74 / 5%);
+      scroll-margin-top: 95px;
+    }
+
+    .admin-card-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .admin-card-heading-copy { min-width: 0; }
+
+    .admin-card-heading h2 {
+      margin-bottom: 7px;
+      color: #14264a;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .admin-card-heading p {
+      margin-bottom: 0;
+      color: #63708a;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .admin-card-icon {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      border: 1px solid #dce7ff;
+      border-radius: 14px;
+      background: #eaf1ff;
+      color: #2456bc;
+      font-size: 19px;
+    }
+
+    .admin-card-icon.gold {
+      border-color: #f3e2ae;
+      background: #fff4d4;
+      color: #88630c;
+    }
+
+    .admin-count-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      min-height: 28px;
+      padding: 4px 9px;
+      border: 1px solid #dce7ff;
+      border-radius: 999px;
+      background: #f5f8ff;
+      color: #2456bc;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .admin-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 17px;
+    }
+
+    .admin-search {
+      position: relative;
+      flex: 1 1 220px;
+      min-width: 0;
+    }
+
+    .admin-search span {
+      position: absolute;
+      top: 50%;
+      left: 13px;
+      color: #8d98ad;
+      font-size: 17px;
+      pointer-events: none;
+      transform: translateY(-50%);
+    }
+
+    .admin-search input {
+      width: 100%;
+      min-height: 43px;
+      padding-left: 40px;
+      border-color: #e1e7f1;
+      border-radius: 11px;
+      background: #fff;
+      font-size: 12px;
+    }
+
+    .admin-toolbar select {
+      width: auto;
+      max-width: 100%;
+      min-width: 145px;
+      min-height: 43px;
+      border-radius: 11px;
+      font-size: 12px;
+    }
+
+    /* Excel export buttons */
+    .admin-export-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      width: 100%;
+    }
+
+    .admin-export-actions .button {
+      min-height: 40px;
+      font-size: 11px;
+    }
+
+    .admin-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid #e5eaf3;
+      border-radius: 13px;
+      background: #fff;
+      scrollbar-width: thin;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      text-align: left;
+    }
+
+    .admin-table thead { background: #f3f6fd; }
+
+    .admin-table th {
+      padding: 14px 13px;
+      border-bottom: 1px solid #e5eaf3;
+      color: #63708a;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .admin-table td {
+      padding: 14px 13px;
+      border-bottom: 1px solid #edf0f6;
+      color: #37445e;
+      font-size: 12px;
+      vertical-align: middle;
+    }
+
+    .admin-table tbody tr:last-child td { border-bottom: 0; }
+
+    .admin-table tbody tr:hover { background: #f8faff; }
+
+    .admin-table .button {
+      min-height: 34px;
+      padding: 7px 11px;
+      border-radius: 9px;
+      font-size: 11px;
+    }
+
+    .admin-student-name {
+      display: block;
+      max-width: 200px;
+      color: #14264a;
+      font-size: 12px;
+      font-weight: 750;
+      overflow-wrap: anywhere;
+    }
+
+    .admin-registration-number {
+      color: #3268d6;
+      font-size: 11px;
+      font-weight: 750;
+      overflow-wrap: anywhere;
+    }
+
+    .admin-table-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-top: 15px;
+      color: #8d98ad;
+      font-size: 11px;
+    }
+
+    .admin-managed-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .admin-managed-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+      padding: 13px;
+      border: 1px solid #e7ebf3;
+      border-radius: 13px;
+      background: #fff;
+    }
+
+    .admin-managed-avatar {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      border: 1px solid #f3e2ae;
+      border-radius: 12px;
+      background: #fff4d4;
+      color: #88630c;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .admin-managed-copy {
+      display: grid;
+      min-width: 0;
+      flex: 1;
+      gap: 3px;
+    }
+
+    .admin-managed-copy strong {
+      overflow-wrap: anywhere;
+      color: #14264a;
+      font-size: 12px;
+    }
+
+    .admin-managed-copy span {
+      overflow-wrap: anywhere;
+      color: #7a879e;
+      font-size: 10px;
+    }
+
+    .create-admin-form {
+      display: grid;
+      gap: 15px;
+    }
+
+    .create-admin-form .form-group { margin-bottom: 0; }
+
+    .create-admin-form label { font-size: 11px; }
+
+    .create-admin-form input {
+      min-height: 44px;
+      border-radius: 11px;
+      font-size: 12px;
+    }
+
+    .create-admin-form .button {
+      width: 100%;
+      min-height: 45px;
+      margin-top: 3px;
+    }
+
+    .admin-form-note {
+      margin: 0;
+      color: #8d98ad;
+      font-size: 10px;
+      line-height: 1.8;
+    }
+
+    .admin-management-message {
+      margin: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .admin-certificate-panel {
+      margin-top: 22px;
+      padding: 22px;
+      border: 1px solid #dce7ff;
+      border-radius: 16px;
+      background: #f8faff;
+      scroll-margin-top: 95px;
+    }
+
+    .admin-certificate-panel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .admin-certificate-panel-header h3 {
+      margin-bottom: 6px;
+      color: #14264a;
+      font-size: 17px;
+    }
+
+    .admin-certificate-panel-header p {
+      margin-bottom: 0;
+      color: #63708a;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .admin-certificate-list {
+      display: grid;
+      gap: 11px;
+    }
+
+    .admin-certificate-list .certificate-item { border-radius: 12px; }
+
+    .admin-password-panel {
+      margin-top: 22px;
+      padding: 22px;
+      border: 1px solid #f3e2ae;
+      border-radius: 16px;
+      background: #fffbef;
+      scroll-margin-top: 95px;
+    }
+
+    .admin-password-panel h3 {
+      margin-bottom: 7px;
+      color: #14264a;
+      font-size: 17px;
+    }
+
+    .admin-password-panel > p {
+      color: #776331;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .admin-password-form {
+      display: grid;
+      gap: 13px;
+    }
+
+    .admin-password-form .form-group { margin-bottom: 0; }
+
+    .admin-password-form input {
+      min-height: 43px;
+      border-radius: 10px;
+      font-size: 12px;
+    }
+
+    .admin-password-form .button {
+      width: fit-content;
+      margin-top: 3px;
+    }
+
+    .admin-dashboard-footer {
+      padding: 22px 20px;
+      border-top: 1px solid #e5eaf3;
+      background: rgb(255 255 255 / 82%);
+      text-align: center;
+    }
+
+    .admin-dashboard-footer p {
+      margin: 0;
+      color: #63708a;
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    .admin-dashboard-footer strong { color: #14264a; }
+
+    .admin-dashboard-footer p + p { margin-top: 3px; }
+
+    @media (max-width: 1050px) {
+      .admin-dashboard-brand img,
+      .admin-brand-fallback {
+        width: 270px;
+        height: 115px;
+      }
+
+      .admin-dashboard-grid { grid-template-columns: minmax(0, 1fr); }
+
+      .admin-dashboard-column {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+      }
+
+      .admin-dashboard-column > * { min-width: 0; }
+
+      .admin-certificate-panel,
+      .admin-password-panel { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 760px) {
+      .admin-dashboard-main {
+        width: calc(100% - 30px);
+        padding-top: 24px;
+      }
+
+      .admin-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .admin-metric:last-child { grid-column: 1 / -1; }
+
+      .admin-dashboard-column { grid-template-columns: minmax(0, 1fr); }
+
+      .admin-dashboard-card { padding: 20px; }
+
+      .admin-dashboard-welcome { padding: 27px 23px; }
+
+      .admin-dashboard-welcome h1 { font-size: 31px; }
+
+      .admin-welcome-decoration {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        font-size: 25px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .admin-dashboard-header-inner {
+        min-height: 66px;
+        gap: 10px;
+      }
+
+      .admin-dashboard-brand img,
+      .admin-brand-fallback {
+        width: 180px;
+        height: 75px;
+      }
+
+      .admin-dashboard-brand .brand-title { font-size: 14px; }
+
+      .admin-dashboard-brand .brand-subtitle {
+        max-width: 190px;
+        font-size: 9px;
+      }
+
+      .admin-header-actions { gap: 7px; }
+
+      .admin-identity {
+        padding: 5px;
+        border: 0;
+        background: transparent;
+      }
+
+      .admin-identity-copy { display: none; }
+
+      .admin-avatar {
+        width: 33px;
+        height: 33px;
+      }
+
+      .admin-header-actions .button {
+        min-height: 36px;
+        padding: 7px 10px;
+        font-size: 11px;
+      }
+
+      .admin-dashboard-main {
+        width: calc(100% - 24px);
+        padding-top: 18px;
+      }
+
+      .admin-dashboard-welcome {
+        gap: 13px;
+        padding: 23px 19px;
+        border-radius: 19px;
+      }
+
+      .admin-dashboard-welcome h1 { font-size: 26px; }
+
+      .admin-dashboard-welcome p { font-size: 12px; }
+
+      .admin-welcome-decoration {
+        width: 43px;
+        height: 43px;
+        border-radius: 12px;
+        font-size: 19px;
+      }
+
+      .admin-section-nav {
+        gap: 7px;
+        margin-block: 19px;
+      }
+
+      .admin-section-nav a {
+        min-height: 36px;
+        padding: 8px 10px;
+        font-size: 10px;
+      }
+
+      .admin-metric {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px;
+        border-radius: 15px;
+      }
+
+      .admin-metric-icon {
+        width: 39px;
+        height: 39px;
+        border-radius: 12px;
+        font-size: 18px;
+      }
+
+      .admin-metric-copy strong { font-size: 24px; }
+
+      .admin-dashboard-card {
+        padding: 16px;
+        border-radius: 17px;
+      }
+
+      .admin-card-heading h2 { font-size: 18px; }
+
+      .admin-toolbar { align-items: stretch; }
+
+      .admin-toolbar select { width: 100%; }
+
+      .admin-export-actions { flex-direction: column; }
+
+      .admin-export-actions .button { width: 100%; }
+
+      .admin-certificate-panel,
+      .admin-password-panel { padding: 15px; }
+
+      .admin-password-form .button { width: 100%; }
+    }
+
+    @media (max-width: 390px) {
+      .admin-dashboard-brand img,
+      .admin-brand-fallback {
+        width: 160px;
+        height: 68px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="admin-dashboard-page">
+
+  <header class="site-header">
+    <div class="header-inner admin-dashboard-header-inner">
+
+      <a href="/" class="brand admin-dashboard-brand" aria-label="CampusAchieve home">
+
+        <img
+          src="images/piet-logo.png"
+          alt="Poornima Institute of Engineering and Technology logo"
+          id="pietLogo"
+        >
+
+        <span
+          id="logoFallback"
+          class="admin-brand-fallback"
+          hidden
+          aria-label="PIET"
+        >PIET</span>
+
+        <span class="brand-text">
+          <span class="brand-title">CampusAchieve</span>
+          <span class="brand-subtitle">Poornima Institute of Engineering and Technology</span>
+        </span>
+
+      </a>
+
+      <div class="admin-header-actions">
+
+        <div class="admin-identity">
+          <div class="admin-avatar" id="adminAvatar" aria-hidden="true">A</div>
+
+          <div class="admin-identity-copy">
+            <strong id="adminName">Administrator</strong>
+            <span>Portal administrator</span>
+          </div>
+        </div>
+
+        <button id="logout" type="button" class="button light">
+          Sign out
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-dashboard-main">
+
+    <section
+      class="admin-dashboard-welcome"
+      aria-labelledby="dashboardTitle"
+      data-reveal
+    >
+      <div class="admin-dashboard-welcome-content">
+        <span class="admin-dashboard-eyebrow">PIET JAIPUR · ADMINISTRATION</span>
+
+        <h1 id="dashboardTitle">Administration dashboard</h1>
+
+        <p>
+          Manage student records, review submitted certificates
+          and oversee authorised portal administrators from one
+          central workspace.
+        </p>
+      </div>
+
+      <div class="admin-welcome-decoration" aria-hidden="true">✦</div>
+    </section>
+
+    <div
+      id="msg"
+      class="message admin-page-message"
+      role="status"
+      aria-live="polite"
+    ></div>
+
+    <nav class="admin-section-nav" aria-label="Dashboard sections">
+      <a href="#studentsSection"><span class="nav-dot" aria-hidden="true"></span>Students</a>
+      <a href="#adminsSection"><span class="nav-dot gold" aria-hidden="true"></span>Administrators</a>
+      <a href="#certPanel"><span class="nav-dot" aria-hidden="true"></span>Certificates</a>
+      <a href="#passwordPanel"><span class="nav-dot gold" aria-hidden="true"></span>Password settings</a>
+    </nav>
+
+    <section class="admin-metrics" aria-label="Dashboard overview">
+
+      <article class="admin-metric">
+        <div class="admin-metric-icon" aria-hidden="true">♙</div>
+        <div class="admin-metric-copy">
+          <span>Total students</span>
+          <strong id="totalStudents">—</strong>
+        </div>
+      </article>
+
+      <article class="admin-metric">
+        <div class="admin-metric-icon gold" aria-hidden="true">▤</div>
+        <div class="admin-metric-copy">
+          <span>Certificates</span>
+          <strong id="totalCertificates">—</strong>
+        </div>
+      </article>
+
+      <article class="admin-metric">
+        <div class="admin-metric-icon green" aria-hidden="true">✓</div>
+        <div class="admin-metric-copy">
+          <span>Administrators</span>
+          <strong id="totalAdmins">—</strong>
+        </div>
+      </article>
+
+    </section>
+
+    <div class="admin-dashboard-grid">
+
+      <section
+        id="studentsSection"
+        class="admin-dashboard-card"
+        aria-labelledby="studentsHeading"
+        data-reveal
+      >
+
+        <div class="admin-card-heading">
+          <div class="admin-card-heading-copy">
+            <span class="eyebrow">STUDENT RECORDS</span>
+            <h2 id="studentsHeading">Student directory</h2>
+            <p>
+              Search students by registration number or name.
+              Open individual certificate records when needed.
+            </p>
+          </div>
+
+          <div class="admin-card-icon" aria-hidden="true">♙</div>
+        </div>
+
+        <div class="admin-toolbar">
+
+          <div class="admin-search">
+            <span aria-hidden="true">⌕</span>
+            <input
+              type="search"
+              id="studentSearch"
+              placeholder="Search name or registration no."
+              aria-label="Search students by name or registration number"
+            >
+          </div>
+
+          <select
+            id="studentPrefixFilter"
+            aria-label="Filter students by registration prefix"
+          >
+            <option value="all">All prefixes</option>
+          </select>
+
+        </div>
+
+        <!-- Excel export controls -->
+        <div class="admin-toolbar admin-export-actions">
+
+          <button
+            type="button"
+            id="exportAllStudents"
+            class="button light"
+          >
+            ↓ Export All Students (Excel)
+          </button>
+
+          <button
+            type="button"
+            id="exportFilteredStudents"
+            class="button gold"
+          >
+            ↓ Export Filtered Students (Excel)
+          </button>
+
+        </div>
+
+        <div class="admin-table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th scope="col">Registration no.</th>
+                <th scope="col">Student name</th>
+                <th scope="col">Passing year</th>
+                <th scope="col">Semester</th>
+                <th scope="col">Certificates</th>
+              </tr>
+            </thead>
+
+            <tbody id="rows">
+              <tr>
+                <td colspan="5">Loading student records...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="admin-table-footer">
+          <span id="studentResultCount">Loading records...</span>
+
+          <button type="button" id="refreshStudents" class="button light">
+            ↻ Refresh
+          </button>
+        </div>
+
+        <section
+          id="certPanel"
+          class="admin-certificate-panel"
+          hidden
+          aria-labelledby="certTitle"
+        >
+
+          <div class="admin-certificate-panel-header">
+            <div>
+              <h3 id="certTitle">Student certificates</h3>
+              <p>Certificate category, event details and document access.</p>
+            </div>
+
+            <button
+              type="button"
+              id="closeCertPanel"
+              class="button light"
+              aria-label="Close certificate panel"
+            >Close</button>
+          </div>
+
+          <div id="certList" class="admin-certificate-list" aria-live="polite">
+            <div class="empty-state">Select a student to view certificates.</div>
+          </div>
+
+        </section>
+
+      </section>
+
+      <div class="admin-dashboard-column">
+
+        <section
+          id="adminsSection"
+          class="admin-dashboard-card"
+          aria-labelledby="adminsHeading"
+          data-reveal
+        >
+
+          <div class="admin-card-heading">
+            <div class="admin-card-heading-copy">
+              <span class="eyebrow">ACCESS MANAGEMENT</span>
+              <h2 id="adminsHeading">Administrators</h2>
+              <p>View the authorised administrators for this portal.</p>
+            </div>
+
+            <div class="admin-card-icon gold" aria-hidden="true">♙</div>
+          </div>
+
+          <div class="admin-toolbar">
+            <div class="admin-search">
+              <span aria-hidden="true">⌕</span>
+              <input
+                type="search"
+                id="adminSearch"
+                placeholder="Search administrators..."
+                aria-label="Search administrators"
+              >
+            </div>
+          </div>
+
+          <div id="adminRows" class="admin-managed-list" aria-live="polite">
+            <div class="empty-state">Administrator records will appear here.</div>
+          </div>
+
+          <div class="admin-table-footer">
+            <span id="adminResultCount">Administrator directory</span>
+
+            <button type="button" id="refreshAdmins" class="button light">
+              ↻ Refresh
+            </button>
+          </div>
+
+        </section>
+
+        <section
+          class="admin-dashboard-card"
+          aria-labelledby="createAdminHeading"
+          data-reveal
+        >
+
+          <div class="admin-card-heading">
+            <div class="admin-card-heading-copy">
+              <span class="eyebrow">NEW ACCESS</span>
+              <h2 id="createAdminHeading">Add administrator</h2>
+              <p>Create an account for an authorised administrator.</p>
+            </div>
+
+            <div class="admin-card-icon gold" aria-hidden="true">+</div>
+          </div>
+
+          <form id="createAdminForm" class="create-admin-form">
+
+            <div class="form-group">
+              <label for="newAdminName">Full name</label>
+              <input
+                id="newAdminName"
+                name="name"
+                type="text"
+                autocomplete="name"
+                maxlength="120"
+                placeholder="Enter administrator name"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="newAdminEmail">Email address</label>
+              <input
+                id="newAdminEmail"
+                name="email"
+                type="email"
+                autocomplete="off"
+                maxlength="254"
+                placeholder="admin@poornima.org"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="newAdminPassword">Temporary password</label>
+              <input
+                id="newAdminPassword"
+                name="password"
+                type="password"
+                autocomplete="new-password"
+                minlength="10"
+                maxlength="128"
+                placeholder="Create a strong password"
+                required
+              >
+              <p class="form-hint">Use at least 10 characters.</p>
+            </div>
+
+            <p
+              id="adminManagementMessage"
+              class="message admin-management-message"
+              role="status"
+              aria-live="polite"
+            ></p>
+
+            <button type="submit" id="createAdminButton" class="button gold">
+              Create administrator <span aria-hidden="true">→</span>
+            </button>
+
+            <p class="admin-form-note">
+              This action must be authorised and validated by the
+              server. A frontend form alone cannot create an account.
+            </p>
+
+          </form>
+
+        </section>
+
+      </div>
+    </div>
+
+    <section
+      id="passwordPanel"
+      class="admin-password-panel"
+      hidden
+      aria-labelledby="passwordHeading"
+    >
+
+      <h3 id="passwordHeading">Update your password</h3>
+
+      <p>
+        Change your administrator password before continuing
+        if the system requires it.
+      </p>
+
+      <form id="changePassword" class="admin-password-form">
+
+        <div class="form-group">
+          <label for="currentPassword">Current password</label>
+          <input
+            id="currentPassword"
+            type="password"
+            name="currentPassword"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="newPassword">New password</label>
+          <input
+            id="newPassword"
+            type="password"
+            name="newPassword"
+            autocomplete="new-password"
+            minlength="10"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm new password</label>
+          <input
+            id="confirmPassword"
+            type="password"
+            name="confirmPassword"
+            autocomplete="new-password"
+            minlength="10"
+            required
+          >
+        </div>
+
+        <p id="passwordMsg" class="message" role="status" aria-live="polite"></p>
+
+        <button type="submit" class="button">Update password</button>
+
+      </form>
+
+    </section>
+
+  </main>
+
+  <footer class="admin-dashboard-footer">
+    <p>
+      <strong>CampusAchieve</strong>
+      &nbsp;|&nbsp;
+      Poornima Institute of Engineering and Technology, Jaipur
+    </p>
+    <p>Student Certificate Management Portal</p>
+  </footer>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const logo = document.getElementById("pietLogo");
+      const fallback = document.getElementById("logoFallback");
+
+      function showFallback() {
+        logo.hidden = true;
+        fallback.hidden = false;
+      }
+
+      logo.addEventListener("error", showFallback);
+
+      if (logo.complete && logo.naturalWidth === 0) {
+        showFallback();
+      }
+    })();
+  </script>
+
+  
+
+  <!-- Existing dashboard behaviour -->
+  <script src="admin.js"></script>
+
+</body>
+</html>
+```

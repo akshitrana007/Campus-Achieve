@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="Student dashboard for CampusAchieve at Poornima Institute of Engineering and Technology, Jaipur."
+  >
+  <meta name="theme-color" content="#14264a">
+
+  <title>Student Dashboard | CampusAchieve — PIET</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    .student-page {
+      min-height: 100vh;
+    }
+
+    .student-header-inner {
+      min-height: 150px;
+      padding-block: 10px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .student-page .student-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .student-page .student-brand img#pietLogo {
+      display: block;
+      width: 350px;
+      height: 140px;
+      max-width: 100%;
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      object-fit: contain;
+      object-position: left center;
+      flex-shrink: 0;
+    }
+
+    .student-brand-fallback {
+      display: grid;
+      place-items: center;
+      width: 350px;
+      height: 140px;
+      max-width: 100%;
+      flex-shrink: 0;
+      border: 2px solid #efbd42;
+      border-radius: 14px;
+      background: #14264a;
+      color: #f6ce65;
+      font-size: 32px;
+      font-weight: 800;
+    }
+
+    .student-page .brand-text {
+      min-width: 0;
+      gap: 5px;
+    }
+
+    .student-page .brand-title {
+      font-size: 22px;
+    }
+
+    .student-page .brand-subtitle {
+      max-width: 330px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .student-header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-left: auto;
+    }
+
+    .student-main {
+      padding-top: 32px;
+    }
+
+    .student-welcome {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 200px;
+    }
+
+    .student-welcome-copy {
+      max-width: 760px;
+    }
+
+    .student-welcome h1 {
+      margin: 0 0 12px;
+    }
+
+    .student-welcome p {
+      max-width: 650px;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .welcome-icon {
+      width: 68px;
+      height: 68px;
+      font-size: 28px;
+    }
+
+    .student-notice {
+      margin-top: 18px;
+    }
+
+    .student-workspace {
+      align-items: start;
+      margin-top: 25px;
+    }
+
+    .student-card {
+      height: 100%;
+      min-width: 0;
+    }
+
+    .student-card .card-header {
+      min-height: 76px;
+    }
+
+    .student-form-actions {
+      align-items: center;
+    }
+
+    .student-form-actions .button {
+      min-width: 145px;
+    }
+
+    #uploadMessage,
+    #profileMessage {
+      overflow-wrap: anywhere;
+    }
+
+    #uploadMessage:empty,
+    #profileMessage:empty {
+      display: none;
+    }
+
+    #uploadMessage:not(:empty),
+    #profileMessage:not(:empty) {
+      display: block;
+    }
+
+    #certificateFile {
+      max-width: 100%;
+    }
+
+    .student-section {
+      margin-top: 26px;
+    }
+
+    .student-records-card {
+      padding: 27px;
+    }
+
+    .student-records-header {
+      align-items: center;
+    }
+
+    .student-records-header p {
+      margin-top: 6px;
+      margin-bottom: 0;
+    }
+
+    .student-search-toolbar {
+      margin-top: 22px;
+    }
+
+    .student-certificate-list {
+      margin-top: 19px;
+      min-width: 0;
+    }
+
+    .student-footer {
+      margin-top: 35px;
+    }
+
+    #eventPreset {
+      display: block;
+      width: 100%;
+      min-height: 44px;
+    }
+
+    #customEventGroup[hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 1100px) {
+      .student-header-inner {
+        justify-content: center;
+      }
+
+      .student-page .student-brand img#pietLogo {
+        width: 270px;
+        height: 115px;
+      }
+
+      .student-brand-fallback {
+        width: 270px;
+        height: 115px;
+      }
+
+      .student-page .brand-title {
+        font-size: 19px;
+      }
+
+      .student-header-actions {
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .student-workspace > * {
+        grid-column: span 12;
+      }
+
+      .student-card {
+        height: auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .student-header-inner {
+        min-height: 0;
+        padding-block: 12px;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .student-page .student-brand {
+        gap: 9px;
+        flex: 1 1 100%;
+        align-items: center;
+      }
+
+      .student-page .student-brand img#pietLogo {
+        width: 180px;
+        height: 75px;
+      }
+
+      .student-brand-fallback {
+        width: 180px;
+        height: 75px;
+        font-size: 22px;
+      }
+
+      .student-page .brand-text {
+        gap: 3px;
+      }
+
+      .student-page .brand-title {
+        font-size: 15px;
+      }
+
+      .student-page .brand-subtitle {
+        max-width: 185px;
+        font-size: 10px;
+      }
+
+      .student-header-actions {
+        width: 100%;
+        justify-content: space-between;
+        margin-left: 0;
+        gap: 7px;
+      }
+
+      .student-main {
+        padding-top: 23px;
+      }
+
+      .student-welcome {
+        align-items: flex-start;
+        min-height: auto;
+      }
+
+      .student-welcome h1 {
+        font-size: 28px;
+      }
+
+      .student-welcome p {
+        font-size: 12px;
+      }
+
+      .welcome-icon {
+        width: 47px;
+        height: 47px;
+        border-radius: 13px;
+        font-size: 21px;
+      }
+
+      .student-records-card {
+        padding: 18px;
+      }
+
+      .student-records-header {
+        align-items: flex-start;
+      }
+
+      .student-records-header .button {
+        width: 100%;
+      }
+
+      .student-form-actions .button {
+        width: 100%;
+      }
+
+      .student-form-actions {
+        align-items: stretch;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .student-page .student-brand img#pietLogo {
+        width: 160px;
+        height: 68px;
+      }
+
+      .student-brand-fallback {
+        width: 160px;
+        height: 68px;
+      }
+
+      .student-page .brand-subtitle {
+        max-width: 145px;
+        font-size: 9px;
+      }
+
+      .student-page .brand-title {
+        font-size: 14px;
+      }
+
+      .student-welcome h1 {
+        font-size: 25px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .student-card {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+
+<body class="student-page">
+
+  <header class="site-header">
+    <div class="header-inner student-header-inner">
+
+      <a class="brand student-brand" href="/" aria-label="CampusAchieve home">
+        <img
+          src="images/piet-logo.png"
+          alt="Poornima Institute of Engineering and Technology logo"
+          id="pietLogo"
+        >
+
+        <span
+          id="logoFallback"
+          class="student-brand-fallback"
+          hidden
+          aria-label="PIET"
+        >PIET</span>
+
+        <span class="brand-text">
+          <span class="brand-title">CampusAchieve</span>
+          <span class="brand-subtitle">
+            Poornima Institute of Engineering and Technology
+          </span>
+        </span>
+      </a>
+
+      <div class="student-header-actions">
+        <span class="badge blue">Student Portal</span>
+        <button class="button light" id="logout" type="button">
+          Sign out
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="page-container page-content student-main">
+
+    <section
+      class="welcome-banner student-welcome"
+      data-reveal
+      aria-labelledby="welcomeHeading"
+    >
+      <div class="student-welcome-copy">
+        <span class="eyebrow">STUDENT WORKSPACE</span>
+
+        <h1 id="welcomeHeading">
+          Welcome, <span id="welcomeName">Student</span>
+        </h1>
+
+        <p>
+          Your achievements deserve a place of their own.
+          Update your student profile, upload certificates and
+          manage your academic and non-academic records from
+          one organised dashboard.
+        </p>
+      </div>
+
+      <div class="icon-box gold welcome-icon" aria-hidden="true">✦</div>
+    </section>
+
+    <div
+      id="pageMessage"
+      class="message student-notice"
+      role="status"
+      aria-live="polite"
+    ></div>
+
+    <section
+      class="dashboard-grid student-workspace"
+      aria-label="Student profile and certificate upload"
+    >
+
+      <article class="dashboard-card student-card" data-reveal>
+        <div class="card-header">
+          <div>
+            <span class="eyebrow">YOUR DETAILS</span>
+            <h2>Student profile</h2>
+            <p>Keep your institute details up to date.</p>
+          </div>
+          <div class="card-icon" aria-hidden="true">◉</div>
+        </div>
+
+        <form id="profileForm" novalidate>
+
+          <div class="form-group">
+            <label for="studentName">Full name</label>
+            <input
+              id="studentName"
+              name="name"
+              type="text"
+              autocomplete="name"
+              maxlength="100"
+              placeholder="Enter your full name"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="registrationNo">Registration number</label>
+            <input
+              id="registrationNo"
+              name="registration_no"
+              type="text"
+              maxlength="100"
+              placeholder="e.g. PIET25AD001"
+              required
+            >
+            <p class="form-hint">
+              Enter the registration number issued by your institute.
+            </p>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="passingYear">Year of passing</label>
+              <input
+                id="passingYear"
+                name="year_of_passing"
+                type="number"
+                min="2020"
+                max="2100"
+                inputmode="numeric"
+                placeholder="e.g. 2028"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="semester">Current semester</label>
+              <select id="semester" name="semester" required>
+                <option value="">Select semester</option>
+                <option value="1">Semester 1</option>
+                <option value="2">Semester 2</option>
+                <option value="3">Semester 3</option>
+                <option value="4">Semester 4</option>
+                <option value="5">Semester 5</option>
+                <option value="6">Semester 6</option>
+                <option value="7">Semester 7</option>
+                <option value="8">Semester 8</option>
+              </select>
+            </div>
+          </div>
+
+          <p class="form-hint">
+            Please check your registration number before saving.
+          </p>
+
+          <div class="form-actions student-form-actions">
+            <button class="button" id="saveProfileButton" type="submit">
+              Save profile
+            </button>
+
+            <span
+              id="profileMessage"
+              class="form-hint"
+              role="status"
+              aria-live="polite"
+            ></span>
+          </div>
+
+        </form>
+      </article>
+
+      <article class="dashboard-card student-card" data-reveal>
+        <div class="card-header">
+          <div>
+            <span class="eyebrow">ADD ACHIEVEMENT</span>
+            <h2>Upload certificate</h2>
+            <p>Add a certificate to your student record.</p>
+          </div>
+          <div class="card-icon gold" aria-hidden="true">＋</div>
+        </div>
+
+        <form id="uploadForm" novalidate>
+
+          <div class="form-group">
+            <label for="category">Certificate category</label>
+            <select id="category" name="category" required>
+              <option value="academic">Academic</option>
+              <option value="non-academic">Non-Academic</option>
+            </select>
+
+            <p class="form-hint">
+              Academic: coursework and academic awards.
+              Non-Academic: competitions, activities and extracurricular
+              achievements.
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label for="eventPreset">Event or certificate title</label>
+            <select id="eventPreset" required>
+              <option value="">Select an event</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="customEventGroup" hidden>
+            <label for="customEventName">Enter event name</label>
+            <input
+              id="customEventName"
+              type="text"
+              maxlength="180"
+              placeholder="Enter event or certificate title"
+            >
+          </div>
+
+          <input id="eventName" name="eventName" type="hidden">
+
+          <div class="form-group">
+            <label for="eventDate">
+              Event date <span class="form-hint">(Optional)</span>
+            </label>
+            <input id="eventDate" name="eventDate" type="date">
+          </div>
+
+          <div class="form-group">
+            <label for="certificateFile">Select certificate file</label>
+            <input
+              id="certificateFile"
+              name="certificate"
+              type="file"
+              accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
+              required
+            >
+
+            <p class="form-hint">
+              Supported formats: PDF, PNG and JPG.
+              Maximum file size is determined by the portal configuration.
+            </p>
+          </div>
+
+          <div class="form-actions student-form-actions">
+            <button class="button gold" id="uploadButton" type="submit">
+              Upload certificate <span aria-hidden="true">↑</span>
+            </button>
+
+            <span
+              id="uploadMessage"
+              class="form-hint"
+              role="status"
+              aria-live="polite"
+            ></span>
+          </div>
+
+        </form>
+      </article>
+
+    </section>
+
+    <section
+      class="section dashboard-card student-records-card student-section"
+      data-reveal
+      aria-labelledby="certificatesHeading"
+    >
+
+      <div class="section-header student-records-header">
+        <div>
+          <span class="eyebrow">YOUR RECORDS</span>
+          <h2 id="certificatesHeading">My certificates</h2>
+          <p>
+            Search, filter and open the certificates in your account.
+          </p>
+        </div>
+
+        <button
+          id="refreshCertificates"
+          class="button light"
+          type="button"
+        >
+          ↻ Refresh list
+        </button>
+      </div>
+
+      <div class="toolbar student-search-toolbar">
+        <div class="search-box">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <input
+            id="certificateSearch"
+            type="search"
+            placeholder="Search event or file name..."
+            aria-label="Search your certificates"
+          >
+        </div>
+
+        <div class="filter-row">
+          <select
+            id="certificateFilter"
+            aria-label="Filter by certificate category"
+          >
+            <option value="all">All categories</option>
+            <option value="academic">Academic</option>
+            <option value="non-academic">Non-Academic</option>
+          </select>
+        </div>
+      </div>
+
+      <div
+        id="certificateList"
+        class="certificate-list student-certificate-list"
+        aria-live="polite"
+        aria-busy="true"
+      >
+        <div class="empty-state">Loading your certificates…</div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="site-footer student-footer">
+    <p>
+      <strong style="color:#14264a">CampusAchieve</strong>
+      &nbsp;·&nbsp;
+      Poornima Institute of Engineering and Technology, Jaipur
+    </p>
+
+    <p style="margin-top:5px">
+      Student Certificate Management Portal
+    </p>
+  </footer>
+
+  <script src="common.js"></script>
+  <script src="student.js"></script>
+  <script src="event-dropdown.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+node_modules/
+backend/.env
+.env
+*.log
+.DS_Store
+uploads/
+
+frontend/images/~$*.xlsx
+
+frontend/images/~$*.xlsx
+
+frontend/images/*.xlsx
+backend/*.backup
