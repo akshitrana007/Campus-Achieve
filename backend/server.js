@@ -321,6 +321,21 @@ function audit(adminId, action, targetType, targetId, details = {}) {
 }
 
 // ================= GOOGLE AUTH ROUTES =================
+app.get('/auth/google', (req, res, next) => {
+  if (
+    !process.env.GOOGLE_CLIENT_ID ||
+    !process.env.GOOGLE_CLIENT_SECRET
+  ) {
+    return res.status(503).send(
+      'Google sign-in is not configured.'
+    );
+  }
+
+  passport.authenticate('google', {
+    scope: ['profile', 'email'],
+    prompt: 'select_account'
+  })(req, res, next);
+});
 
 
 app.get(
