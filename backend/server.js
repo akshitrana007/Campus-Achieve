@@ -862,6 +862,57 @@ app.get('/api/my-certificates', requireStudent, async (req, res) => {
     });
   }
 });
+// ================= DELETE OWN CERTIFICATE (STUDENT) =================
+
+app.delete('/api/certificates/:id', requireStudent, async (req, res) => {
+  try {
+    const certificateId = Number(req.params.id);
+
+    if (!Number.isInteger(certificateId) || certificateId < 1) {
+      return res.status(400).json({
+        error: 'Invalid certificate.'
+      });
+    }
+
+    // Only the owner's certificate can be found here.
+    const [rows] = await db.execute(
+      `SELECT id, object_key
+       FROM certificates
+       WHERE id = ? AND student_id = ?
+       LIMIT 1`,
+      [certificateId, req.user.id]
+    );
+
+    if (!rows.length) {
+      return res.status(404).json({
+        error: 'Certificate not found.'
+      });
+    }
+
+    // Delete the file from storage first, then the database row.
+    await s3.send(new DeleteObjectCommand({
+      Bucket: process.env.S3_BUCKET,
+      Key: rows[0].object_key
+    }));
+
+    await db.execute(
+      'DELETE FROM certificates WHERE id = ? AND student_id = ?',
+      [certificateId, req.user.id]
+    );
+
+    res.json({
+      ok: true,
+      message: 'Certificate deleted successfully.'
+    });
+
+  } catch (err) {
+    console.error('Certificate delete error:', err.message);
+
+    res.status(500).json({
+      error: 'Could not delete the certificate. Please try again.'
+    });
+  }
+});
 
 // ================= VIEW CERTIFICATE FILE =================
 

@@ -584,7 +584,23 @@
       openCertificate(certificate, viewButton);
     });
 
-    row.append(info, viewButton);
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.className = "button light";
+    deleteButton.textContent = "Delete";
+    deleteButton.style.color = "#c83e4d";
+
+    deleteButton.addEventListener("click", () => {
+      deleteCertificate(certificate, deleteButton);
+    });
+
+    const actions = document.createElement("div");
+    actions.style.display = "flex";
+    actions.style.flexWrap = "wrap";
+    actions.style.gap = "8px";
+    actions.append(viewButton, deleteButton);
+
+    row.append(info, actions);
 
     return row;
   }
@@ -642,6 +658,64 @@
       );
 
     } finally {
+      button.disabled = false;
+      button.textContent = previousText;
+    }
+  }
+
+  /* ================= DELETE CERTIFICATE ================= */
+
+  async function deleteCertificate(certificate, button) {
+    if (!certificate.id) {
+      setMessage(
+        pageMessage,
+        "This certificate record has no ID.",
+        "error"
+      );
+      return;
+    }
+
+    const title =
+      certificate.event_name ||
+      getOriginalFilename(certificate);
+
+    const confirmed = window.confirm(
+      `Kya aap "${title}" certificate delete karna chahte hain?\n\n` +
+      "Ye wapas nahi aayega."
+    );
+
+    if (!confirmed) return;
+
+    const previousText = button.textContent;
+
+    button.disabled = true;
+    button.textContent = "Deleting…";
+
+    try {
+      await api(
+        `/api/certificates/${encodeURIComponent(certificate.id)}`,
+        { method: "DELETE" }
+      );
+
+      allCertificates = allCertificates.filter(
+        (item) => item.id !== certificate.id
+      );
+
+      renderCertificates();
+
+      setMessage(
+        pageMessage,
+        "Certificate deleted successfully.",
+        "success"
+      );
+
+    } catch (error) {
+      setMessage(
+        pageMessage,
+        error.message || "Unable to delete this certificate.",
+        "error"
+      );
+
       button.disabled = false;
       button.textContent = previousText;
     }
