@@ -148,6 +148,7 @@ passport.deserializeUser((user, done) => done(null, user));
 
 // ================= GOOGLE STUDENT LOGIN =================
 
+
 if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
   passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -155,7 +156,9 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
     callbackURL: process.env.GOOGLE_CALLBACK_URL
   }, async (_accessToken, _refreshToken, profile, done) => {
     try {
-      const emailEntry = (profile.emails || []).find(e => e.verified);
+      const emailEntry = (profile.emails || []).find(
+        e => e.verified === true
+      );
 
       if (!emailEntry) {
         return done(null, false, {
@@ -163,43 +166,79 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
         });
       }
 
-      const email = emailEntry.value.toLowerCase();
+      const email = String(emailEntry.value || '')
+        .trim()
+        .toLowerCase();
 
-      const domain = (process.env.COLLEGE_EMAIL_DOMAIN || '')
+      const domain = String(
+        process.env.COLLEGE_EMAIL_DOMAIN || ''
+      )
+        .trim()
         .toLowerCase()
         .replace(/^@/, '');
 
-      if (!domain || email.split('@').pop() !== domain) {
+      if (!domain || !email.endsWith(`@${domain}`)) {
         return done(null, false, {
           message: 'Use your official college email.'
         });
       }
 
+      if (!profile.id) {
+        return done(null, false, {
+          message: 'Google account ID could not be verified.'
+        });
+      }
+
       const [existing] = await db.execute(
-        `SELECT id, email, name, registration_no,
-                year_of_passing, semester
+        `SELECT id, google_sub, email, name,
+                registration_no, year_of_passing, semester
          FROM students
-         WHERE email = ?`,
+         WHERE email = ?
+         LIMIT 1`,
         [email]
       );
 
       if (existing.length > 0) {
-        await db.execute(
-          'UPDATE students SET google_sub = ? WHERE id = ?',
-          [profile.id, existing[0].id]
-        );
+        const student = existing[0];
+
+        if (
+          student.google_sub &&
+          student.google_sub !== profile.id
+        ) {
+          return done(null, false, {
+            message: 'This account is linked to another Google account.'
+          });
+        }
+
+        if (!student.google_sub) {
+          await db.execute(
+            `UPDATE students
+             SET google_sub = ?
+             WHERE id = ? AND google_sub IS NULL`,
+            [profile.id, student.id]
+          );
+        }
 
         return done(null, {
           role: 'student',
-          ...existing[0]
+          id: student.id,
+          email: student.email,
+          name: student.name,
+          registration_no: student.registration_no,
+          year_of_passing: student.year_of_passing,
+          semester: student.semester
         });
       }
 
-      const displayName = profile.displayName || email;
+      const displayName = String(
+        profile.displayName || email
+      ).trim().slice(0, 160);
 
       const [result] = await db.execute(
-        `INSERT INTO students (google_sub, email, name)
-         VALUES (?, ?, ?)`,
+        `INSERT INTO students
+         (google_sub, email, name, registration_no,
+          year_of_passing, semester)
+         VALUES (?, ?, ?, NULL, NULL, NULL)`,
         [profile.id, email, displayName]
       );
 
@@ -214,7 +253,10 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
       });
 
     } catch (err) {
-      console.error('Google login database error:', err.message);
+      console.error(
+        'Google login database error:',
+        err.code || err.message
+      );
       return done(err);
     }
   }));
@@ -280,21 +322,6 @@ function audit(adminId, action, targetType, targetId, details = {}) {
 
 // ================= GOOGLE AUTH ROUTES =================
 
-app.get('/auth/google', (req, res, next) => {
-  if (
-    !process.env.GOOGLE_CLIENT_ID ||
-    !process.env.GOOGLE_CLIENT_SECRET
-  ) {
-    return res.status(503).send(
-      'Google sign-in is not configured.'
-    );
-  }
-
-  passport.authenticate('google', {
-    scope: ['profile', 'email'],
-    prompt: 'select_account'
-  })(req, res, next);
-});
 
 app.get(
   '/auth/google/callback',
@@ -306,6 +333,7 @@ app.get(
 
     req.session.regenerate(err => {
       if (err) {
+        console.error('Google session regeneration error:', err.message);
         return res.status(500).send(
           'Could not start a secure session.'
         );
@@ -313,10 +341,20 @@ app.get(
 
       req.login(authenticatedUser, loginErr => {
         if (loginErr) {
+          console.error('Google session login error:', loginErr.message);
           return res.status(500).send('Login failed.');
         }
 
-        res.redirect('/student.html');
+        req.session.save(saveErr => {
+          if (saveErr) {
+            console.error('Google session save error:', saveErr.message);
+            return res.status(500).send(
+              'Could not save your login session.'
+            );
+          }
+
+          return res.redirect('/student.html');
+        });
       });
     });
   }
