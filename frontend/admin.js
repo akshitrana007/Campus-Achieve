@@ -1113,10 +1113,10 @@ $("createAdminForm").addEventListener("submit", async (event) => {
     return;
   }
 
-  if (password.length < 10) {
+  if (password.length < 14) {
     setMessage(
       message,
-      "Use a temporary password of at least 10 characters.",
+      "Use a temporary password of at least 14 characters.",
       "error"
     );
 
@@ -1197,10 +1197,10 @@ $("changePassword").addEventListener("submit", async (event) => {
     return;
   }
 
-  if (newPassword.length < 10) {
+  if (newPassword.length < 14) {
     setMessage(
       message,
-      "Your new password must contain at least 10 characters.",
+      "Your new password must contain at least 14 characters.",
       "error"
     );
 
